@@ -1,0 +1,63 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model user{
+  id Int @id @default(autoincrement())
+  name String
+  email String @unique
+  password String
+  foto String
+  backgroundUrl String?
+  level Int @default(0)
+  analises analise[]
+  personagens personagensUser[]
+  likes likesAnalise[]
+}
+
+model analise{
+  id Int @id @default(autoincrement())
+  animeId Int 
+  animeName String 
+  userId Int
+  user user @relation(fields: [userId], references: [id])
+  notaGeral Int
+  notaAbertura Int 
+  texto String 
+  imageUrl String
+  likes likesAnalise[]
+  episodios analiseEp[]
+}
+
+model analiseEp{
+  id Int @id @default(autoincrement())
+  analiseId Int
+  countEp Int?
+  rate Int?
+  analise analise @relation(fields: [analiseId], references: [id])
+}
+
+model likesAnalise{
+  id Int @id @default(autoincrement())
+  analiseId Int
+  analise analise @relation(fields: [analiseId], references: [id])
+  userId Int
+  user user @relation(fields: [userId], references: [id])
+  liked Boolean
+}
+
+model personagensUser{
+  id Int @id @default(autoincrement())
+  userId Int
+  user user @relation(fields: [userId], references: [id])
+  nome String
+  foto String
+}
