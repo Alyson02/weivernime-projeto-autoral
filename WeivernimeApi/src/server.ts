@@ -1,3 +1,5 @@
+import 'tsconfig-paths/register';
+process.env.TS_NODE_PROJECT = '../tsconfig.json';
 import app, { init } from "@/app";
 
 const port = process.env.PORT || 5000;

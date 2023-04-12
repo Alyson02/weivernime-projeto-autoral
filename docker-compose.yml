@@ -22,6 +22,7 @@ services:
       - 5000:5000
     depends_on:
       - postgres
+      - redis
     env_file:
       - WeivernimeApi/.env
 
@@ -42,6 +43,7 @@ services:
       - postgres
       - node
       - react
+      - redis
 
 volumes:
   postgres-volume:

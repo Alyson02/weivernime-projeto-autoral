@@ -1,16 +1,16 @@
 import { Router } from "express";
 import { authenticateToken, validateBody } from "@/middlewares";
-import { animesMaisAvaliados, createAnalise, getAnalise, likeOrDislike, listAnalise, top5 } from "@/controllers";
+import controler from "@/controllers/analiseController";
 import { createAnaliseSchema, likeAnaliseSchema } from "@/schemas"
 
 const analiseRouter = Router();
 
-analiseRouter.post("/", validateBody(createAnaliseSchema), createAnalise);
-analiseRouter.get("/", listAnalise);
-analiseRouter.get("/:analiseId", getAnalise)
-analiseRouter.get("/dados/top5", top5)
-analiseRouter.get("/dados/top5/anime", animesMaisAvaliados)
-analiseRouter.post("/:analiseId/likeordislike", /*authenticateToken,*/ validateBody(likeAnaliseSchema), likeOrDislike)
+analiseRouter.post("/", validateBody(createAnaliseSchema), controler.createAnalise);
+analiseRouter.get("/", controler.listAnalise);
+analiseRouter.get("/:analiseId", controler.getAnalise)
+analiseRouter.get("/dados/top5", controler.top5)
+analiseRouter.get("/dados/top5/anime", controler.animesMaisAvaliados)
+analiseRouter.post("/:analiseId/likeordislike", /*authenticateToken,*/ validateBody(likeAnaliseSchema), controler.likeOrDislike)
 
 export {
     analiseRouter
