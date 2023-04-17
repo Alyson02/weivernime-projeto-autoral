@@ -13,7 +13,7 @@ async function getAnimeById(animeId) {
 
 async function listanimes(search, page, limit = 10) {
   try {
-    const animes = await axios.get(`${proxyUrl}${URL_BASE}/anime`, { params: {
+    const animes = await axios.get(`${URL_BASE}/anime`, { params: {
         q: search,
         page,
         limit

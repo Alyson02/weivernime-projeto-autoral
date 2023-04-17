@@ -5,7 +5,7 @@
     "start": "npm run migration:run && node dist/server.js",
     "migration:run": "prisma migrate deploy",
     "migration:generate": "npm run dev:load-envs prisma migrate dev",
-    "test": "NODE_ENV=test jest --passWithNoTests --detectOpenHandles --forceExit --runInBand ",
+    "test": "NODE_ENV=test npm run test:load-envs jest -- --passWithNoTests --detectOpenHandles --runInBand",
     "test:coverage": "NODE_ENV=test jest --passWithNoTests --runInBand --coverage --collectCoverageFrom='./src/**'",
     "test:migration:run": "npm run test:load-envs prisma migrate deploy",
     "test:migration:generate": "npm run test:load-envs prisma migrate dev",

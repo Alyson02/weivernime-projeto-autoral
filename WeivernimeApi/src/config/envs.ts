@@ -12,5 +12,5 @@ export function loadEnv() {
   const currentEnvs = dotenv.config({ path });
   dotenvExpand.expand(currentEnvs);
 
-  console.log(path, process.env.POSTGRES_HOST)
+  console.log(path, process.env.POSTGRES_DATABASE)
 }

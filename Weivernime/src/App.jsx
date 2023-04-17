@@ -1,4 +1,4 @@
-import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
+import { Navigate, Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import MainContainer from "./components/MainContainer";
 import { SearchProvider } from "./contexts/SearchContext";
 import AddAnalise from "./pages/AddAnalise";

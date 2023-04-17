@@ -42,7 +42,6 @@ async function signup(body: signupModel) {
 async function changePic(imageUrl: string, userId: number) {
 
     const user = await userRepository.getFirst(userId);
-    if (!user) throw unauthorizedError();
 
     await userRepository.updatePicUser(user, imageUrl);
 
@@ -52,7 +51,7 @@ async function get(userId: number) {
 
     const user = await userRepository.getUserById(userId);
 
-    if (!user) throw notFoundError();
+    if (!user.user) throw notFoundError();
 
     return user;
 
