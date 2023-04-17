@@ -26,14 +26,14 @@ async function listAnalise(page: number, limit: number, search: string,  animeId
     return response;
 }
 
-async function getAnalise(analiseId: number): Promise<AnaliseModel> {
+async function getAnalise(analiseId: number, userId: number): Promise<AnaliseModel> {
 
     const analise = await analiseRepository.first(analiseId);
 
     if (!analise) throw notFoundError();
 
-    const liked = analise.likes.filter(x => x.userId === 1 && x.liked === true).length > 0 ? true : false;
-    const disliked = analise.likes.filter(x => x.userId === 1 && x.liked === false).length > 0 ? true : false;
+    const liked = analise.likes.filter(x => x.userId === userId && x.liked === true).length > 0 ? true : false;
+    const disliked = analise.likes.filter(x => x.userId === userId && x.liked === false).length > 0 ? true : false;
 
     return { ...analise, liked, disliked };
 

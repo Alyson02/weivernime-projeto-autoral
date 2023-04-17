@@ -31,8 +31,9 @@ async function listAnalise(req: Request, res: Response) {
 async function getAnalise(req: Request, res: Response) {
 
     const analiseId = Number(req.params.analiseId);
+    const userId = Number(req.query.userId);
 
-    const analise = await analiseService.getAnalise(analiseId);
+    const analise = await analiseService.getAnalise(analiseId, userId);
 
     return res.send(analise)
 
