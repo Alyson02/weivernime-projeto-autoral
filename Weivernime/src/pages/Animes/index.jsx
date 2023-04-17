@@ -24,9 +24,11 @@ export default function Animes() {
     setLoading(true);
     const consultaranimes = async () => {
       const animes = await jikanService.listanimes(search, page, 10);
-      setanimes(animes);
-      setLoading(false);
-      setPage(page + 1);
+      if (animes.length > 0) {
+        setanimes(animes);
+        setLoading(false);
+        setPage(page + 1);
+      }
     };
 
     consultaranimes();
@@ -47,16 +49,15 @@ export default function Animes() {
     const animesServer = await jikanService.listanimes(search, page, 10);
     setanimes([...animes, ...animesServer]);
 
-    if (animesServer.length === 0 || animesServer.length < 10)
-      setNoMore(false);
+    if (animesServer.length === 0 || animesServer.length < 10) setNoMore(false);
     setPage(page + 1);
   }
 
+  if(loading) return <Loader/>
+
   return (
     <Wrapper>
-      <BtnAnalisar onClick={() => navigate("/animes")}>
-        ANALISAR ANIME
-      </BtnAnalisar>
+      <Title>Selecione um anime para analisar</Title>
 
       <InfiniteScroll
         dataLength={animes.length}
@@ -75,7 +76,10 @@ export default function Animes() {
               >
                 <Imagemanime imagem={anime.images.jpg.image_url}>
                   <AnimeNameWrapper>
-                    <AnimeName>{anime.title.slice(0, 20)}{anime.title.length > 20 ? "..." : ""}</AnimeName>
+                    <AnimeName>
+                      {anime.title.slice(0, 20)}
+                      {anime.title.length > 20 ? "..." : ""}
+                    </AnimeName>
                   </AnimeNameWrapper>
                 </Imagemanime>
               </Anime>
@@ -92,19 +96,36 @@ const Wrapper = styled.div`
   margin-bottom: 20px;
 `;
 
-const BtnAnalisar = styled(Button)`
-  background-color: #0094ff !important;
+const Title = styled.h1`
+  font-size: 30px;
+  font-family: "roboto";
+  font-weight: bold;
+  display: inline-block;
+  margin-bottom: 20px;
 `;
 
 const AnimesWrapper = styled.div`
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 30px;
   grid-column-gap: 0;
+  grid-row-gap: 20px;
   margin: 0;
   max-width: 969px;
   margin-top: 20px;
   justify-items: center; /* Alinha verticalmente */
+  grid-auto-flow: dense;
+
+  @media screen and (max-width: 850px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  @media screen and (max-width: 768px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media screen and (max-width: 480px) {
+    grid-template-columns: 1fr;
+  }
 `;
 
 const Anime = styled.div`

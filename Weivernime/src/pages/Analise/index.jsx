@@ -10,6 +10,7 @@ import like from "@/assets/svg/like.svg";
 import dislike from "@/assets/svg/dislike.svg";
 import likeFill from "@/assets/svg/like-fill.svg";
 import dislikeFill from "@/assets/svg/dislike-fill.svg";
+import { UseAuth } from "@/contexts/Auth/useAuth";
 
 export default function Analise() {
   const { analiseId } = useParams();
@@ -20,10 +21,12 @@ export default function Analise() {
   const [liked, setLiked] = useState(false);
   const [disLiked, setDisLiked] = useState(false);
 
+  const {user} = UseAuth();
+
   useEffect(() => {
     setLoading(true);
     const getAnalise = async () => {
-      const analise = await analiseService.analiseById(analiseId);
+      const analise = await analiseService.analiseById(analiseId, user?.user?.id);
 
       analise.data.episodios.sort((a, b) => a.countEp - b.countEp);
 
@@ -46,10 +49,19 @@ export default function Analise() {
 
   function calcularMediaEp() {
     let totalEp = 0;
+    let sumEp = analise?.episodios?.length;
 
-    analise?.episodios?.forEach((e) => (totalEp += e.rate));
+    if(sumEp === 0 || isNaN(sumEp)) sumEp = 1;
 
-    return (totalEp / analise?.episodios?.length).toFixed(1);
+    analise?.episodios?.forEach((e) => {
+      const rateDb = Number(e.rate);
+      if (isNaN(rateDb)) return;
+      totalEp += rateDb;
+    });
+
+    
+
+    return (totalEp / sumEp).toFixed(1);
   }
 
   async function doLike() {
@@ -142,6 +154,11 @@ const NotasWrapper = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+
+  @media(max-width: 508px){
+    flex-direction: column;
+    gap: 40px;
+  }
 `;
 
 const NotaText = styled.h1`
@@ -167,6 +184,12 @@ const Title = styled.h1`
   font-size: 24px;
   line-height: 15px;
   margin-top: 20px;
+
+  @media(max-width: 508px){
+    margin-top: 50px;
+    font-size: 20px;
+    line-height: 20px;
+  }
 `;
 
 const SpanTitle = styled.span`
@@ -177,6 +200,12 @@ const SpanTitle = styled.span`
   line-height: 15px;
   margin-top: 20px;
   color: ${({ color }) => (color ? color : "black")};
+
+  @media(max-width: 508px){
+    margin-top: 50px;
+    font-size: 20px;
+    line-height: 20px;
+  }
 `;
 
 const TextoWrapper = styled.div`
@@ -204,6 +233,7 @@ const Texto = styled.p`
   font-size: 20px;
   line-height: 20px;
   margin-top: 90px;
+  word-wrap: break-word;
 `;
 
 const Wrapper = styled.div`

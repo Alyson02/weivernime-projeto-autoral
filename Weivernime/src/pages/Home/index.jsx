@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import jikanService from "@/services/jikan";
 import analiseService from "@/services/analise";
 import { useNavigate } from "react-router-dom";
+import { Scrollbars } from "react-custom-scrollbars";
 
 export default function Home() {
   const [animes, setAnimes] = useState([]);
@@ -34,7 +35,7 @@ export default function Home() {
 
   return (
     <div>
-      <Carousel showIndicators={false} showThumbs={false} showStatus={false}>
+      <Carousel showIndicators={false} showThumbs={false} showStatus={false} style={{ touchAction: "none"}}>
         {analises.map((analise) => {
           return (
             <CarouselItemWrapper
@@ -54,31 +55,41 @@ export default function Home() {
           );
         })}
       </Carousel>
-      <Title>Animes mais avaliados</Title>
-      <AnimesWrapper>
-        {animes.map((anime) => {
-          return (
-            <Anime
-              key={anime.mal_id}
-              onClick={() =>
-                navigate(`/analises`, { state: { animeId: anime.mal_id } })
-              }
-            >
-              <Imagemanime imagem={anime.images.jpg.image_url}>
-                <AnimeNameWrapper>
-                  <AnimeName>
-                    {anime.title.slice(0, 20)}
-                    {anime.title.length > 20 ? "..." : ""}
-                  </AnimeName>
-                </AnimeNameWrapper>
-              </Imagemanime>
-            </Anime>
-          );
-        })}
-      </AnimesWrapper>
+      <AnimesSection>
+        <Title>Animes mais avaliados</Title>
+        <Scrollbars style={{ width: "100%", height: "140px" }} hidden="">
+          <AnimesWrapper>
+            {animes.map((anime) => {
+              return (
+                <Anime
+                  key={anime.mal_id}
+                  onClick={() =>
+                    navigate(`/analises`, { state: { animeId: anime.mal_id } })
+                  }
+                >
+                  <Imagemanime imagem={anime.images.jpg.image_url}>
+                    <AnimeNameWrapper>
+                      <AnimeName>
+                        {anime.title.slice(0, 20)}
+                        {anime.title.length > 20 ? "..." : ""}
+                      </AnimeName>
+                    </AnimeNameWrapper>
+                  </Imagemanime>
+                </Anime>
+              );
+            })}
+          </AnimesWrapper>
+        </Scrollbars>
+      </AnimesSection>
     </div>
   );
 }
+
+const AnimesSection = styled.section`
+  @media (max-width: 570px) {
+    padding: 0 10px;
+  }
+`;
 
 const CarouselItemWrapper = styled.div`
   position: relative;
@@ -127,14 +138,23 @@ const Title = styled.h1`
 
 const AnimesWrapper = styled.div`
   display: flex;
-  max-width: 969px;
+  max-width: 968px;
   margin-top: 20px;
+
+  /* @media (max-width: 570px) {
+    overflow: scroll;
+    overflow-y: hidden;
+  } */
 `;
 
 const Anime = styled.div`
   width: 20%;
   max-height: 108px;
   cursor: pointer;
+
+  @media (max-width: 570px) {
+    min-width: 193px;
+  }
 `;
 
 const Imagemanime = styled.div`

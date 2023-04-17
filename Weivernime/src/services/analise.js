@@ -8,7 +8,7 @@ async function createAnalise(body) {
     return response;
   } catch (error) {
     console.log(error);
-    return error;
+    return null;
   }
 }
 
@@ -33,17 +33,17 @@ async function listAnalises(search, page, limit = 10, animeId) {
     return analiseWithAnime;
   } catch (error) {
     console.log(error);
-    return error;
+    return null;
   }
 }
 
-async function analiseById(id) {
+async function analiseById(id, userId) {
   try {
-    const response = await api.get(`/analise/${id}`);
+    const response = await api.get(`/analise/${id}`, { params: { userId } });
     return response;
   } catch (error) {
     console.log(error);
-    return error;
+    return null;
   }
 }
 
@@ -52,7 +52,7 @@ async function likeordislikeAnalise(analiseId, liked) {
     await api.post(`/analise/${analiseId}/likeordislike`, { liked });
   } catch (error) {
     console.log(error);
-    return error;
+    return null;
   }
 }
 
@@ -60,7 +60,7 @@ async function top5() {
   try {
     return (await api.get(`/analise/dados/top5`)).data;
   } catch (error) {
-    return error;
+    return null;
   }
 }
 
@@ -68,7 +68,7 @@ async function top5animes() {
   try {
     return (await api.get(`/analise/dados/top5/anime`)).data;
   } catch (error) {
-    return error;
+    return null;
   }
 }
 
@@ -78,5 +78,5 @@ export default {
   analiseById,
   likeordislikeAnalise,
   top5,
-  top5animes
+  top5animes,
 };

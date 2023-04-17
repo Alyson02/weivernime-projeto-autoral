@@ -13,6 +13,7 @@ import jikanService from "../../services/jikan";
 import Episode from "../Episode";
 import imgbbService from "../../services/imgbb";
 import analiseService from "../../services/analise";
+import { useNavigate } from "react-router-dom";
 
 export default function AnaliseForm({ animeId }) {
   const [loading, setLoading] = useState(false);
@@ -22,6 +23,8 @@ export default function AnaliseForm({ animeId }) {
   const [changeText, setChangeText] = useState(false);
   const [anime, setAnime] = useState(null);
   const [rateEpisodes, setRateEpisodes] = useState([]);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     setLoading(true);
@@ -52,6 +55,7 @@ export default function AnaliseForm({ animeId }) {
     validations: FormValidation,
 
     onSubmit: async (data) => {
+      setLoading(true);
       let base64String;
       const reader = new FileReader();
       reader.addEventListener("load", async () => {
@@ -70,6 +74,10 @@ export default function AnaliseForm({ animeId }) {
         };
 
         await analiseService.createAnalise(body);
+
+        setLoading(false);
+
+        navigate("/analises");
       });
       reader.readAsDataURL(file);
     },
@@ -95,7 +103,7 @@ export default function AnaliseForm({ animeId }) {
   return !openCrop ? (
     <FormWrapper onSubmit={handleSubmit}>
       <Title>
-        Analisando <Title style={{color: "#1565c0"}}>{anime?.title}</Title>
+        Analisando <Title style={{ color: "#1565c0" }}>{anime?.title}</Title>
       </Title>
 
       <InputWrapper>
@@ -179,7 +187,9 @@ export default function AnaliseForm({ animeId }) {
       </InputWrapper>
 
       <SubmitContainer>
-        <Button type="submit">Publicar</Button>
+        <Button type="submit" disabled={loading}>
+          Publicar
+        </Button>
       </SubmitContainer>
 
       <EpisodesWrapper>
@@ -195,7 +205,9 @@ export default function AnaliseForm({ animeId }) {
       </EpisodesWrapper>
     </FormWrapper>
   ) : (
-    <CropEasy {...{ photoURL, setOpenCrop, setPhotoURL, setFile }} />
+    <CropEasy
+      {...{ photoURL, setOpenCrop, setPhotoURL, setFile, proporcao: 6 }}
+    />
   );
 }
 

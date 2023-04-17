@@ -1,5 +1,5 @@
-import { Cancel } from '@mui/icons-material';
-import CropIcon from '@mui/icons-material/Crop';
+import { Cancel } from "@mui/icons-material";
+import CropIcon from "@mui/icons-material/Crop";
 import {
   Box,
   Button,
@@ -7,12 +7,21 @@ import {
   DialogContent,
   Slider,
   Typography,
-} from '@mui/material';
-import React, { useState } from 'react';
-import Cropper from 'react-easy-crop';
-import getCroppedImg from './utils/cropImage';
+} from "@mui/material";
+import React, { useState } from "react";
+import Cropper from "react-easy-crop";
+import getCroppedImg from "./utils/cropImage";
 
-const CropEasy = ({ photoURL, setOpenCrop, setPhotoURL, setFile }) => {
+const CropEasy = ({
+  photoURL,
+  setOpenCrop,
+  setPhotoURL,
+  setFile,
+  proporcao,
+  heightBlackArea,
+  sinalize,
+  setSinalize
+}) => {
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
   const [rotation, setRotation] = useState(0);
@@ -22,7 +31,7 @@ const CropEasy = ({ photoURL, setOpenCrop, setPhotoURL, setFile }) => {
     setCroppedAreaPixels(croppedAreaPixels);
   };
 
-  console.log(photoURL)
+  console.log(photoURL);
 
   const cropImage = async () => {
     try {
@@ -34,39 +43,41 @@ const CropEasy = ({ photoURL, setOpenCrop, setPhotoURL, setFile }) => {
       setPhotoURL(url);
       setFile(file);
       setOpenCrop(false);
+      if(sinalize != undefined) setSinalize(true);
     } catch (error) {
       console.log(error);
     }
   };
-  
+
   return (
     <>
       <DialogContent
         dividers
         sx={{
-          background: '#333',
-          position: 'relative',
-          height: 162 /* controla a altura da area preta */,
-          width: 'auto',
+          background: "#333",
+          position: "relative",
+          height: heightBlackArea
+            ? heightBlackArea
+            : 162 /* controla a altura da area preta */,
+          width: "auto",
           minWidth: { sm: 500 },
         }}
       >
         <Cropper
-          
           image={photoURL}
           crop={crop}
           zoom={zoom}
           rotation={rotation}
-          aspect={6}
+          aspect={proporcao}
           onZoomChange={setZoom}
           onRotationChange={setRotation}
           onCropChange={setCrop}
           onCropComplete={cropComplete}
-          objectFit='auto-cover'
+          objectFit="auto-cover"
         />
       </DialogContent>
-      <DialogActions sx={{ flexDirection: 'column', mx: 3, my: 2 }}>
-        <Box sx={{ width: '100%', mb: 1 }}>
+      <DialogActions sx={{ flexDirection: "column", mx: 3, my: 2 }}>
+        <Box sx={{ width: "100%", mb: 1 }}>
           <Box>
             <Typography>Zoom: {zoomPercent(zoom)}</Typography>
             <Slider
@@ -80,7 +91,7 @@ const CropEasy = ({ photoURL, setOpenCrop, setPhotoURL, setFile }) => {
             />
           </Box>
           <Box>
-            <Typography>Rotation: {rotation + '°'}</Typography>
+            <Typography>Rotation: {rotation + "°"}</Typography>
             <Slider
               valueLabelDisplay="auto"
               min={0}
@@ -92,9 +103,9 @@ const CropEasy = ({ photoURL, setOpenCrop, setPhotoURL, setFile }) => {
         </Box>
         <Box
           sx={{
-            display: 'flex',
+            display: "flex",
             gap: 2,
-            flexWrap: 'wrap',
+            flexWrap: "wrap",
           }}
         >
           <Button

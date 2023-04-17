@@ -7,7 +7,7 @@ import { loadEnv, connectDb, disconnectDB, connectRegis, disconnectRegis } from 
 loadEnv();    
 
 import { handleApplicationErrors } from "@/middlewares";
-import { analiseRouter } from "@/routers";
+import { analiseRouter, userRouter } from "@/routers";
 
 const app = express();
 app
@@ -15,6 +15,7 @@ app
   .use(express.json())
   .get("/health", (_req, res) => res.send("OK!"))
   .use("/analise", analiseRouter)
+  .use(userRouter)
   .use(handleApplicationErrors);
 
 export function init(): Promise<Express> {

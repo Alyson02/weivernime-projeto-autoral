@@ -8,7 +8,6 @@ import Loader from "@/components/Loader";
 import { EndMessage } from "@/components/EndMessage";
 import SearchContext from "@/contexts/SearchContext";
 import { useLocation, useNavigate } from "react-router-dom";
-import analise from "@/services/analise";
 
 export default function Analises() {
   const [analises, setAnalises] = useState([]);
@@ -86,17 +85,20 @@ export default function Analises() {
         <AnalisesWrapper>
           {analises.map((analise) => {
             return (
-              <Analise
-                key={analise.id}
-                onClick={() => navigate(`/analise/${analise.id}`)}
-              >
-                <ImagemAnalise imagem={analise.thumb}>
+              <Analise key={analise.id}>
+                <ImagemAnalise
+                  onClick={() => navigate(`/analise/${analise.id}`)}
+                  imagem={analise.thumb}
+                >
                   <AnimeNameWrapper>
                     <AnimeName>{analise.animeName}</AnimeName>
                   </AnimeNameWrapper>
                 </ImagemAnalise>
                 <AnaliseUserWrapper>
-                  <AnaliseUserFoto src={analise.user.foto} />
+                  <AnaliseUserFoto
+                    src={analise.user.foto}
+                    onClick={() => navigate(`/userPerfil/${analise.user.id}`)}
+                  />
                   <AnaliseUsername>{analise.user.name}</AnaliseUsername>
                 </AnaliseUserWrapper>
               </Analise>
@@ -121,16 +123,29 @@ const AnalisesWrapper = styled.div`
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   grid-column-gap: 0;
+  grid-row-gap: 20px;
   margin: 0;
   max-width: 969px;
   margin-top: 20px;
   justify-items: center; /* Alinha verticalmente */
+  grid-auto-flow: dense;
+
+  @media screen and (max-width: 850px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  @media screen and (max-width: 768px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media screen and (max-width: 480px) {
+    grid-template-columns: 1fr;
+  }
 `;
 
 const Analise = styled.div`
   width: 200px;
   max-height: 345px;
-  cursor: pointer;
 `;
 
 const ImagemAnalise = styled.div`
@@ -139,6 +154,7 @@ const ImagemAnalise = styled.div`
   width: 100%;
   height: 300px;
   position: relative;
+  cursor: pointer;
 `;
 
 const AnaliseUserWrapper = styled.div`
@@ -153,6 +169,7 @@ const AnaliseUserFoto = styled.img`
   border-radius: 50px;
   margin-right: 10px;
   object-fit: cover;
+  cursor: pointer;
 `;
 
 const AnaliseUsername = styled.span`

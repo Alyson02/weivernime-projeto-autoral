@@ -12,3 +12,10 @@ body {
 .rccs{
   margin: 0!important;
 }
+
+
+@media(max-width: 720px){
+  #analise-nav-item{
+    display: none;
+  }
+}

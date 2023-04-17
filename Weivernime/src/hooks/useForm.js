@@ -41,11 +41,18 @@ export const useForm = (options) => {
           newErrors[key] = pattern.message;
         }
 
+        const minLength = validation?.minLength;
+        if(minLength?.value && value < minLength.value){
+          valid = false;
+          newErrors[key] = minLength.message;
+        }
+        
         const custom = validation?.custom;
         if (custom?.isValid && !custom.isValid(value)) {
           valid = false;
           newErrors[key] = custom.message;
         }
+
       }
 
       if (!valid) {
